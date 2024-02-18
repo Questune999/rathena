@@ -1,57 +1,39 @@
-//===== rAthena Script =======================================
-//= Dead Branch Room Script
-//===== By: ==================================================
-//= Nova http://www.novaragnarok.com
-//============================================================
-
 prontera,146,171,6	script	Portal Square	89,{
 	.@n$ = "[^3355FF Portal Square ^000000]";
 	.@party_id = getcharid(1);
 	.@p_name$ = getpartyname(.@party_id);
 	.@instance$ = "Portal Square";
 
-		if (getcharid(0) == getpartyleader(.@party_id,2)) {
-		mes .@n$;
-		mes "Portal Square is available everyday for 1 hour and 30 minutes.";
-		mes "Remember, the room and everything inside including boss chamber and other resources, watch out for enemies as well since the room are pk free.";
-			next;
-			switch(select("Enter the Room:Cancel")) {
-			case 1:
-				callsub L_Enter,0,1;
-			case 2:
-			mes .@n$;
-			mes "Have a nice day then, see you later!.";
-				close;
-			}
-		}
+	if (!.@party_id || getcharid(0) != getpartyleader(.@party_id, 2)) {
 		mes .@n$;
 		mes "In able to enter the Portal Square, you must have a party.";
-		next;
-			end;
-		}
-		switch(select("Enter the Portal Square:Cancel")) {
+		close;
+	}
+	mes .@n$;
+	mes "Portal Square is available everyday for 1 hour and 30 minutes.";
+	next;
+	mes .@n$;
+	mes "Remember, the room and everything inside including boss chamber and other resources, watch out for enemies as well since the room are pk free.";
+	next;
+	switch(select("Enter the Room:Cancel")) {
 		case 1:
-			callsub L_Enter,1,1;
+			switch(instance_enter("Portal Square")) {
+				case 1:
+					mes .@n$;
+					mes "You doesn't have a party.";
+					close;
+				case 2:
+					mes .@n$;
+					mes "You can enter the room after making a party.";
+					end;
+			}
+			break;
 		case 2:
 			mes .@n$;
 			mes "Have a nice day then, see you later!.";
-			end;
-		}
-		
-L_Enter:
-	switch(instance_enter("Portal Square")) {
-	case 3:
-			mes .@n$;
-		mes "You doesn't have a party.";
-		close;
-	case 2:
-			mes .@n$;
-		mes "You can enter the room after making a party.";
-		close;
-	case 1:
-		mapannounce "npc_in", strcharinfo(0)+" of the party, "+.@p_name$+", is entering a Portal Square.",bc_map,"0x00ff99",FW_NORMAL,12;
-		end;
+			break;
 	}
+	close;
 }
 
 //==================================================================================
@@ -62,6 +44,6 @@ prt_maze01	mapflag	monster_noteleport
 prt_maze01	mapflag	nowarpto
 prt_maze01	mapflag	nomemo
 prt_maze01	mapflag	noteleport
-prt_maze01	mapflag	nosave SavePoint
+prt_maze01	mapflag	nosave
 prt_maze01	mapflag	nopenalty
 prt_maze01	mapflag	pvp
